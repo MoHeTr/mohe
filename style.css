@@ -1,0 +1,97 @@
+.container {
+    background-color: #ffffff96; /* خلفية الإطار */
+    padding: 20px; /* مسافة داخلية بين الإطار والنص */
+    border-radius: 10px; /* الزوايا المدورة */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* الظل حوالين الإطار */
+    display: inline-block; /* باش يكون الإطار حول المحتوى فقط */
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    display: flex;               /* نفعّل Flexbox */
+    justify-content: center;     /* نركز العنصر أفقيًا */
+    align-items: center;         /* نركز العنصر عموديًا */
+    height: 100vh;               /* نخلي الصفحة تغطي كل الارتفاع */
+    margin: 0;                   /* نزيل أي مسافات خارجية */
+}
+body {
+    font-family: "Lalezar", sans-serif; /* هنا اخترت خط Arial */
+}
+button {
+    background-color: #4CAF50; /* خلفية خضراء */
+    color: white; /* النص يكون أبيض */
+    padding: 15px 32px; /* مساحة داخلية (Padding) كبيرة للزر */
+    text-align: center; /* النص يكون في الوسط */
+    text-decoration: none; /* نزيل أي خط تحت النص */
+    display: inline-block; /* نعرض الزر كعنصر داخلي */
+    font-size: 16px; /* حجم الخط */
+    margin: 10px 2px; /* مسافة خارجية (Margin) */
+    cursor: pointer; /* المؤشر يكون على شكل يد عند التمرير */
+    border: none; /* نزيل الحواف */
+    border-radius: 12px; /* حواف مستديرة */
+    box-shadow: 0 4px #999; /* ظل للزر */
+    transition: background-color 0.3s ease; /* حركة انتقال سلسة عند التفاعل */
+}
+
+/* تغيير الشكل عند تمرير الماوس على الزر */
+button:hover {
+    background-color: #3e8e41; /* تغير لون الخلفية عند المرور بالماوس */
+}
+
+/* التأثير عند الضغط على الزر */
+button:active {
+    background-color: #3e8e41; /* نفس اللون عند الضغط */
+    box-shadow: 0 2px #666; /* تقليل الظل */
+    transform: translateY(4px); /* تخفيض الزر للأسفل قليلا */
+}
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 2s ease-in forwards;
+}
+
+/* تأثير الشريحة للزر */
+.slide-in {
+    opacity: 0;
+    transform: translateY(30px); /* يبدأ من تحت */
+    animation: slideIn 1.5s ease-in forwards;
+}
+
+/* تحريك العناصر */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* زر بألوان وتأثيرات */
+.my-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s; /* انتقال في اللون و الحجم */
+}
+
+/* التأثيرات على الزر لما تمر عليه */
+.my-button:hover {
+    background-color: #45a049;
+    transform: scale(1.1); /* يكبر لما تمر عليه */
+}

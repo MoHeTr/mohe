@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>أول صفحة ويب لي</title>
+    <link rel="stylesheet" href="style.css"> <!-- تأكد من أن هذا الرابط صحيح -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet"> <!-- رابط Google Fonts -->
+  </head>
+  <div class="container">
+  <body>
+    <h1 class="fade-in">مرحبا بكم في موقعي!</h1>
+    <p>أنا محمد، وهذا هو أول موقع لي حبيت نتعلم برمجة باش ندير بيها مستقبل بصح راهي تبان صعيبا شوي 😅!</p>
+    <p> ادعمونا معنويا علابالي ماديا متدعوش نتوما🙂</p>
+</body> 
+</html>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مثال على أيقونة قابلة للضغط</title>
+    <style>
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px #999;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 2px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- هذا هو الرابط -->
+    <a href="https://www.instagram.com/">
+        <!-- هذه هي الأيقونة (الصورة) اللي تقدر تضغط عليها -->
+        <img src="https://www.dropbox.com/scl/fi/agpsy320k4jxp77cxnaf1/images-4.jpg?rlkey=vz8gd5otp9r76m9jfuk5pqacl&st=jkoqjy0f&dl=0" alt="instagram" style="width: 50px; height: 50px;">
+    </a>
+    <p> هذا رابط درتو تجربة برك باش يدخلكم للانسطا زعما</p>
+</body> 
+<p> عندي مشكلا سامطة منقدرش نحط فوطو معرف علاه</p>
+</html>
+</html>
+<p> منتعبوكمش حابين تدخلو لليوتوب لضو هنا برك</p>
+<html>
+    <a href="https://www.youtube.com/" target="_blank">
+    <button class="my-button slide-in">اذهب إلى يوتيوب</button>
+    </a>
+<div>
+<h2>  مكان والو ني نجرب برك</h2>
+<p> 🙂 وش راك تستنا قلنا مكان والو </p>
+</div>
+<style>
+    body {
+        background-color: #23aca0; /* خلفية رمادية خفيفة */
+        color: #000000; /* لون النص */
+    }
+</style>
+<style>
+    a {
+        color: #007bff; /* اللون الأصلي للرابط */
+        text-decoration: none;
+    }
+    a:hover {
+        color: #ff4500; /* تغيير اللون عند التمرير */
+    }
+</style>
+<a href="#">رابط جميل</a>
+</div>
+<h2>اترك تعليقك</h2>
+    <input type="text" id="username" placeholder="ادخل اسم المستخدم">
+    <textarea id="comment" placeholder="اكتب تعليقك هنا..."></textarea>
+    <button onclick="addComment()">إرسال</button>
+    <div id="comments"></div>
+
+    <script>
+    function addComment() {
+        const username = document.getElementById('username').value;
+        const commentBox = document.getElementById('comment').value;
+        
+        if (!username.trim()) {
+            alert("يجب عليك إدخال اسم مستخدم!");
+            return;
+        }
+
+        if (commentBox.trim()) {
+            const commentSection = document.getElementById('comments');
+            const newComment = document.createElement('p');
+            newComment.textContent = `${username}: ${commentBox}`;
+            commentSection.appendChild(newComment);
+            document.getElementById('comment').value = '';
+        } else {
+            alert("من فضلك اكتب تعليقاً");
+        }
+    }
+    </script>
