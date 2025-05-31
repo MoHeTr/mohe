@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تطبيق أسئلة إسلامية</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0; padding: 0;
+      height: 100vh;
+      display: flex; justify-content: center; align-items: center;
+      color: #1a237e;
+      overflow: hidden;
+    }
+    #quiz-container {
+  background: white;
+  padding: 30px 20px; /* خفف البادينغ شوي */
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  max-width: 700px;
+  width: 90vw; /* خلي العرض 90% من عرض الشاشة */
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* استعمل media query لشاشات أقل من 400px */
+@media (max-width: 400px) {
+  #quiz-container {
+    padding: 20px 10px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  #question {
+    font-size: 1.4rem;
+    min-height: 100px;
+  }
+  .options li {
+    font-size: 1.1rem;
+    padding: 12px 15px;
+  }
+  button {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+  }
+
+}
+    h1 {
+      margin-bottom: 25px;
+      font-size: 2.8rem;
+      user-select: none;
+    }
+    #question {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      min-height: 80px;
+      transition: opacity 0.5s ease;
+      user-select: text;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 30px;
+    }
+    .options li {
+      background: #e8eaf6;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    .options li:hover {
+      background: #c5cae9;
+    }
+    .options li.selected {
+      background: #3949ab;
+      color: white;
+    }
+    button {
+      background: #3949ab;
+      color: white;
+      border: none;
+      padding: 15px 45px;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(57,73,171,0.5);
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+    }
+    button:hover:not(:disabled) {
+      background: #283593;
+      transform: scale(1.05);
+    }
+    button:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+    button:disabled {
+      background: #9fa8da;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    #result {
+      font-size: 2rem;
+      user-select: none;
+    }
+
+    /* تأثير تلاشي */
+    .fade-out {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="quiz-container">
+    <h1>تطبيق أسئلة إسلامية</h1>
+    <div id="question" class="fade-in">تحميل السؤال...</div>
+    <ul class="options"></ul>
+    <button id="nextBtn" disabled>التالي</button>
+    <div id="result" style="display:none;"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "ما هي أول سورة في القرآن؟",
+        options: ["الفاتحة", "البقرة", "الكهف", "الماعون"],
+        answer: 0
+      },
+      {
+        question: "كم عدد أركان الإسلام؟",
+        options: ["3", "4", "5", "6"],
+        answer: 2
+      },
+      {
+        question: "ما اسم النبي الذي ابتلعه الحوت؟",
+        options: ["يونس", "موسى", "عيسى", "محمد"],
+        answer: 0
+      },
+      {
+        question: "في أي مدينة ولد النبي محمد ﷺ؟",
+        options: ["المدينة", "مكة", "الرياض", "دمشق"],
+        answer: 1
+      },
+      {
+        question: "ما هو الركن الثالث من أركان الإسلام؟",
+        options: ["الشهادة", "الصلاة", "الزكاة", "الصوم"],
+        answer: 3
+      },
+      {
+        question: "كم عدد ركعات صلاة الظهر؟",
+        options: ["2", "4", "3", "1"],
+        answer: 1
+      },
+      {
+        question: "ما اسم الكتاب المقدس عند المسلمين؟",
+        options: ["التوراة", "الإنجيل", "القرآن", "الزبور"],
+        answer: 2
+      },
+      {
+        question: "في أي شهر يصوم المسلمون؟",
+        options: ["رمضان", "شوال", "ذو الحجة", "محرم"],
+        answer: 0
+      },
+      {
+        question: "من هو أول خليفة في الإسلام؟",
+        options: ["عمر بن الخطاب", "أبو بكر الصدق", "عثمان بن عفان", "علي بن أبي طالب"],
+        answer: 1
+      },
+      {
+        question: "ما اسم المسجد الذي هاجر إليه النبي؟",
+        options: ["الأقصى", "الحرام", "النبوي", "القدس"],
+        answer: 2
+      },
+      {
+        question: "ما هو الركن الرابع من أركان الإسلام؟",
+        options: ["الصوم", "الحج", "الزكاة", "الشهادة"],
+        answer: 2
+      },
+      {
+        question: "كم عدد سور القرآن الكريم؟",
+        options: ["114", "120", "99", "130"],
+        answer: 0
+      },
+      {
+        question: "ما اسم النبي الذي كان معروفاً بالصادق الأمين؟",
+        options: ["إبراهيم", "محمد", "نوح", "موسى"],
+        answer: 1
+      },
+      {
+        question: "في أي سنة هاجر النبي محمد ﷺ؟",
+        options: ["610 هـ", "622 م", "632 م", "600 م"],
+        answer: 1
+      },
+      {
+        question: "ما هو الركن الثاني من أركان الإسلام؟",
+        options: ["الصلاة", "الشهادة", "الزكاة", "الصوم"],
+        answer: 0
+      },
+      {
+        question: "كم عدد ركعات صلاة المغرب؟",
+        options: ["3", "4", "2", "5"],
+        answer: 0
+      },
+      {
+        question: "ما اسم أول سورة نزلت؟",
+        options: ["القدر", "العلق", "الفاتحة", "النساء"],
+        answer: 1
+      },
+      {
+        question: "من هو النبي الذي بنى الكعبة؟",
+        options: ["إبراهيم", "نوح", "محمد", "موسى"],
+        answer: 0
+      },
+      {
+        question: "ما هو الركن الخامس من أركان الإسلام؟",
+        options: ["الصلاة", "الحج", "الشهادة", "الزكاة"],
+        answer: 1
+      },
+      {
+        question: "كم عدد ركعات صلاة العشاء؟",
+        options: ["3", "4", "2", "5"],
+        answer: 1
+      },
+      {
+        question: "ما اسم والد النبي محمد ﷺ؟",
+        options: ["عبد الله", "أبو طالب", "الحسن", "الحسين"],
+        answer: 0
+      },
+      {
+        question: "ما هي لغة القرآن؟",
+        options: ["العربية", "الفارسية", "الإنجليزية", "التركية"],
+        answer: 0
+      },
+      {
+        question: "ما هو اسم المسجد الحرام؟",
+        options: ["المسجد الأقصى", "المسجد النبوي", "الكعبة", "المسجد الحرام"],
+        answer: 3
+      },
+      {
+        question: "كم عدد ركعات صلاة الفجر؟",
+        options: ["2", "4", "3", "1"],
+        answer: 0
+      },
+      {
+        question: "من هو الصحابي المعروف بالفاروق؟",
+        options: ["أبو بكر", "عمر بن الخطاب", "عثمان", "علي بن أبي طالب"],
+        answer: 1
+      },
+      {
+        question: "ما هو أول كتاب سماوي؟",
+        options: ["القرآن", "التوراة", "الإنجيل", "الزبور"],
+        answer: 1
+      },
+      {
+        question: "كم عدد أركان الإيمان؟",
+        options: ["5", "6", "4", "3"],
+        answer: 1
+      },
+      {
+        question: "من هو النبي الذي ابتلعه الحوت؟",
+        options: ["يونس", "إبراهيم", "نوح", "محمد"],
+        answer: 0
+      },
+      {
+        question: "ما هي عاصمة الدولة الإسلامية الأموية؟",
+        options: ["دمشق", "القدس", "مكة", "المدينة"],
+        answer: 0
+      },
+      {
+        question: "ما هو اسم زوجة النبي محمد ﷺ الأولى؟",
+        options: ["عائشة", "خديجة", "حفصة", "زينب"],
+        answer: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.querySelector('.options');
+    const nextBtn = document.getElementById('nextBtn');
+    const resultEl = document.getElementById('result');
+
+    function loadQuestion() {
+      // تفعيل زر التالي يكون غير مفعّل حتى يختار المستخدم
+      nextBtn.disabled = true;
+
+      // تأثير تلاشي
+      questionEl.classList.remove('fade-in');
+      questionEl.classList.add('fade-out');
+      optionsEl.classList.remove('fade-in');
+      optionsEl.classList.add('fade-out');
+
+      setTimeout(() => {
+        // تحميل السؤال الجديد
+        const q = questions[currentQuestion];
+        questionEl.textContent = `${currentQuestion + 1}. ${q.question}`;
+
+        // تفريغ الخيارات
+        optionsEl.innerHTML = '';
+
+        // عرض الخيارات
+        q.options.forEach((option, index) => {
+          const li = document.createElement('li');
+          li.textContent = option;
+          li.addEventListener('click', () => {
+            // إلغاء تحديد الكل
+            [...optionsEl.children].forEach(li => li.classList.remove('selected'));
+            // تحديد المختار فقط
+            li.classList.add('selected');
+            // تفعيل زر التالي
+            nextBtn.disabled = false;
+          });
+          optionsEl.appendChild(li);
+        });
+
+        // تأثير دخول
+        questionEl.classList.remove('fade-out');
+        questionEl.classList.add('fade-in');
+        optionsEl.classList.remove('fade-out');
+        optionsEl.classList.add('fade-in');
+      }, 500);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      const selectedOption = document.querySelector('.options li.selected');
+      if (!selectedOption) return;
+
+      // تحقق إذا كان الجواب صحيح
+      const answerIndex = questions[currentQuestion].answer;
+      const chosenIndex = Array.from(optionsEl.children).indexOf(selectedOption);
+
+      if (chosenIndex === answerIndex) {
+        score++;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      questionEl.style.display = 'none';
+      optionsEl.style.display = 'none';
+      nextBtn.style.display = 'none';
+
+      resultEl.style.display = 'block';
+      resultEl.textContent = `انتهى الاختبار! نتيجتك: ${score} من ${questions.length}`;
+    }
+
+    // أول تحميل للسؤال
+    loadQuestion();
+  </script>
+
+</body>
+</html>
+
+
