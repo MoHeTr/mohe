@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مسابقة دينية</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    nav {
+      background-color: #2d2d2d;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav h1 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    nav button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .hidden {
+      display: none;
+    }
+    .question {
+      margin: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #fff;
+    }
+    .question strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    .question .options button {
+      display: block;
+      margin: 5px 0;
+      padding: 8px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    .correct {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .incorrect {
+      background-color: #f44336;
+      color: white;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #start-screen, #end-screen {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+    }
+    #start-screen button, #end-screen button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>🌙 مسابقة دينية</h1>
+    <button onclick="location.reload()">إعادة البداية</button>
+  </nav>
+
+  <div id="start-screen">
+    <h2>أهلاً بك في مسابقة الأسئلة الدينية!</h2>
+    <p>اختبر معلوماتك وابدأ الآن</p>
+    <button onclick="startQuiz()">ابدأ</button>
+  </div>
+
+  <div id="questions-container" class="hidden"></div>
+
+  <div id="end-screen" class="hidden">
+    <h2>انتهت المسابقة!</h2>
+    <p id="score-text"></p>
+    <button onclick="location.reload()">إعادة اللعب</button>
+  </div>
+
+  <script>
+    const questions = [
+  {
+    q: "ما هو أول أركان الإسلام؟",
+    options: ["الصلاة", "الشهادة", "الصوم", "الحج"],
+    correct: 1
+  },
+  {
+    q: "كم عدد الصلوات المفروضة في اليوم؟",
+    options: ["ثلاث", "أربع", "خمس", "ست"],
+    correct: 2
+  },
+  {
+    q: "من هو خاتم الأنبياء؟",
+    options: ["عيسى عليه السلام", "موسى عليه السلام", "محمد صلى الله عليه وسلم", "إبراهيم عليه السلام"],
+    correct: 2
+  },
+  {
+    q: "ما هو الكتاب الذي أنزل على النبي محمد؟",
+    options: ["الإنجيل", "القرآن", "الزبور", "التوراة"],
+    correct: 1
+  },
+  {
+    q: "في أي شهر يصوم المسلمون؟",
+    options: ["محرم", "شوال", "رمضان", "ذو الحجة"],
+    correct: 2
+  },
+  {
+    q: "ما اسم الصلاة التي تُصلى عند شروق الشمس؟",
+    options: ["الفجر", "الضحى", "العصر", "القيام"],
+    correct: 1
+  },
+  {
+    q: "كم عدد سور القرآن الكريم؟",
+    options: ["114", "112", "113", "115"],
+    correct: 0
+  },
+  {
+    q: "من هو النبي الذي ابتلعه الحوت؟",
+    options: ["نوح", "يونس", "موسى", "إبراهيم"],
+    correct: 1
+  },
+  {
+    q: "من هو أول إنسان خلقه الله؟",
+    options: ["إبراهيم", "نوح", "آدم", "موسى"],
+    correct: 2
+  },
+  {
+    q: "أين نزل الوحي على النبي محمد؟",
+    options: ["المدينة", "غار حراء", "الطائف", "الكعبة"],
+    correct: 1
+  },
+  {
+    q: "ما هي أعظم آية في القرآن؟",
+    options: ["آية الكرسي", "سورة الفاتحة", "سورة الإخلاص", "آية الدين"],
+    correct: 0
+  },
+  {
+    q: "كم عدد الركعات في صلاة الظهر؟",
+    options: ["2", "3", "4", "5"],
+    correct: 2
+  },
+  {
+    q: "من هو أول نبي؟",
+    options: ["آدم", "إدريس", "نوح", "إبراهيم"],
+    correct: 0
+  },
+  {
+    q: "من هي أم المسلمين؟",
+    options: ["فاطمة الزهراء", "عائشة رضي الله عنها", "خديجة رضي الله عنها", "حفصة رضي الله عنها"],
+    correct: 2
+  },
+  {
+    q: "في أي ليلة نزل القرآن؟",
+    options: ["ليلة الجمعة", "ليلة القدر", "ليلة النصف من شعبان", "ليلة الإسراء"],
+    correct: 1
+  },
+  {
+    q: "من هو الذي بنى الكعبة مع إبراهيم؟",
+    options: ["إسماعيل", "يعقوب", "موسى", "نوح"],
+    correct: 0
+  },
+  {
+    q: "كم عدد الأشهر الحرم؟",
+    options: ["2", "3", "4", "5"],
+    correct: 2
+  },
+  {
+    q: "ما هو الركن الرابع من أركان الإسلام؟",
+    options: ["الزكاة", "الصوم", "الحج", "الصلاة"],
+    correct: 1
+  },
+  {
+    q: "كم مرة ذكر اسم محمد في القرآن؟",
+    options: ["3", "4", "5", "6"],
+    correct: 1
+  },
+  {
+    q: "من هو النبي الذي فلق البحر؟",
+    options: ["إبراهيم", "عيسى", "موسى", "نوح"],
+    correct: 2
+  },
+  {
+    q: "أين كانت قبلة المسلمين الأولى؟",
+    options: ["الكعبة", "المسجد الأقصى", "المدينة", "السماء"],
+    correct: 1
+  },
+  {
+    q: "من هو النبي الذي رُفع إلى السماء؟",
+    options: ["إلياس", "عيسى", "محمد", "إدريس"],
+    correct: 1
+  },
+  {
+    q: "ما هي السورة التي تُعرف بعروس القرآن؟",
+    options: ["البقرة", "الرحمن", "يس", "النور"],
+    correct: 1
+  },
+  {
+    q: "ما هو اسم والد النبي محمد؟",
+    options: ["عبد الله", "أبو طالب", "عبد المطلب", "حمزة"],
+    correct: 0
+  },
+  {
+    q: "ما هي أطول سورة في القرآن؟",
+    options: ["النساء", "آل عمران", "البقرة", "الأنعام"],
+    correct: 2
+  },
+  {
+    q: "كم مرة يجب على المسلم الحج؟",
+    options: ["مرة واحدة", "مرتين", "ثلاث مرات", "كل سنة"],
+    correct: 0
+  },
+  {
+    q: "من هو أول الخلفاء الراشدين؟",
+    options: ["عمر", "علي", "عثمان", "أبو بكر"],
+    correct: 3
+  },
+  {
+    q: "ما هو يوم الحج الأكبر؟",
+    options: ["يوم عرفة", "يوم النحر", "يوم التروية", "يوم الجمعة"],
+    correct: 1
+  },
+  {
+    q: "ما هي السورة التي لا تبدأ ببسم الله؟",
+    options: ["التوبة", "الأنفال", "الفتح", "الجمعة"],
+    correct: 0
+  },
+  {
+    q: "كم عدد أجزاء القرآن الكريم؟",
+    options: ["30", "29", "28", "27"],
+    correct: 0
+  }
+];
+
+    let currentScore = 0;
+    let answered = 0;
+
+    function startQuiz() {
+      document.getElementById('start-screen').classList.add('hidden');
+      const container = document.getElementById('questions-container');
+      container.classList.remove('hidden');
+
+      questions.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+
+        let optionsHTML = '';
+        item.options.forEach((opt, i) => {
+          optionsHTML += `<button onclick="checkAnswer(this, ${i === item.correct}, ${index})">${opt}</button>`;
+        });
+
+        div.innerHTML = `
+          <strong>${item.q}</strong>
+          <div class="options">${optionsHTML}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function checkAnswer(button, isCorrect, questionIndex) {
+      const buttons = button.parentElement.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+        button.classList.add('correct');
+        currentScore++;
+      } else {
+        button.classList.add('incorrect');
+      }
+
+      answered++;
+      if (answered === questions.length) {
+        showEndScreen();
+      }
+    }
+
+    function showEndScreen() {
+      document.getElementById('questions-container').classList.add('hidden');
+      document.getElementById('end-screen').classList.remove('hidden');
+      document.getElementById('score-text').textContent = `لقد أجبت بشكل صحيح على ${currentScore} من أصل ${questions.length} سؤال.`;
+    }
+  </script>
+</body>
+</html>
